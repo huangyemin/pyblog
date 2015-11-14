@@ -1,51 +1,55 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{% endblock %}</title>
-    {% block css %}
-        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" rel="stylesheet">
-        <link href="/static/css/blog.css" rel="stylesheet">
-    {% endblock %}
-</head>
-<body>
-<div class="blog-masthead">
-    <div class="container">
-        <nav class="blog-nav">
-            <a class="blog-nav-item active" href="#">主页</a>
-            <a class="blog-nav-item" href="#">New features</a>
-            <a class="blog-nav-item" href="#">Press</a>
-            <a class="blog-nav-item" href="#">Labs</a>
-            <a class="blog-nav-item" href="/about">关于我</a>
-        </nav>
-    </div>
-</div>
-
-<div class="container">
-    <div class="blog-header">
-        <h1 class="blog-title">星奕的博客</h1>
-
-        <p class="lead blog-description">创新 教育 科技</p>
-    </div>
-    {% block content %}
-
-    {% endblock %}
-</div>
-
-<footer class="blog-footer">
-    <p>Blog template built for <a href="http://getbootstrap.com">Bootstrap</a> by <a
-            href="https://twitter.com/mdo">@mdo</a>.</p>
-
-    <p>
-        <a href="#">Back to top</a>
-    </p>
-</footer>
-{% block js %}
-    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+{% extends "bootstrap/base.html" %}
+{% block html_attribs %}
+    lang="zh-CN"
 {% endblock %}
-</body>
-</html>
+{% block styles %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/blog.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block navbar %}
+    <div class="blog-masthead">
+        <div class="container">
+            <nav class="blog-nav">
+                <a class="blog-nav-item active" href="{{ url_for('index') }}">主页</a>
+                <a class="blog-nav-item" href="#">New features</a>
+                <a class="blog-nav-item" href="#">Press</a>
+                <a class="blog-nav-item" href="#">Labs</a>
+                <a class="blog-nav-item" href="{{ url_for('about') }}">关于我</a>
+                {% if current_user.is_authenticated %}
+                    <a class="blog-nav-item" href="{{ url_for('logout') }}">注销</a>
+                {% else %}
+                    <a class="blog-nav-item" href="{{ url_for('login') }}">登录</a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="blog-header">
+
+        </div>
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% block pageContent %}
+
+        {% endblock %}
+    </div>
+    <br>
+    <br>
+    <footer class="blog-footer">
+
+        <p>Blog template built for <a href="http://getbootstrap.com">Bootstrap</a> by <a
+                href="https://twitter.com/mdo">@mdo</a>.</p>
+
+        <p>
+            <a href="#">Back to top</a>
+        </p>
+    </footer>
+{% endblock %}
