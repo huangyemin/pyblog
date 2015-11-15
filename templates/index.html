@@ -1,4 +1,6 @@
 {% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% set active_page = "index" %}
 {% block title %}
     主页
 {% endblock %}
@@ -16,12 +18,13 @@
 
                     <p>{{ blog.summary }} <a href="/blog/{{ blog.id }}">查看全文</a></p>
                 </div>
+            {% else %}
+                这家伙太懒了，还没有发表过文章
             {% endfor %}
-
             <nav>
                 <ul class="pager">
-                    <li><a href="#">Previous</a></li>
-                    <li><a href="#">Next</a></li>
+                    <li><a href="#">上一页</a></li>
+                    <li><a href="#">下一页</a></li>
                 </ul>
             </nav>
 

@@ -1,4 +1,10 @@
 {% extends "bootstrap/base.html" %}
+{% import "bootstrap/utils.html" as utils %}
+{% set navigation_bar = [
+    (url_for('index'), 'index', '主页'),
+    (url_for('about'), 'about', '关于我')
+] %}
+{% set active_page = active_page|default('index') %}
 {% block html_attribs %}
     lang="zh-CN"
 {% endblock %}
@@ -11,15 +17,17 @@
     <div class="blog-masthead">
         <div class="container">
             <nav class="blog-nav">
-                <a class="blog-nav-item active" href="{{ url_for('index') }}">主页</a>
-                <a class="blog-nav-item" href="#">New features</a>
-                <a class="blog-nav-item" href="#">Press</a>
-                <a class="blog-nav-item" href="#">Labs</a>
-                <a class="blog-nav-item" href="{{ url_for('about') }}">关于我</a>
+                {% for href, id, caption in navigation_bar %}
+                    <a class="blog-nav-item {% if id == active_page %}active{% endif %}"
+                       href="{{ href|e }}">{{ caption|e }}</a>
+                {% endfor %}
                 {% if current_user.is_authenticated %}
+                    <a class="blog-nav-item {% if 'post' == active_page %}active{% endif %}"
+                       href="{{ url_for('postBlog') }}">发表文章</a>
                     <a class="blog-nav-item" href="{{ url_for('logout') }}">注销</a>
                 {% else %}
-                    <a class="blog-nav-item" href="{{ url_for('login') }}">登录</a>
+                    <a class="blog-nav-item {% if 'login' == active_page %}active{% endif %}"
+                       href="{{ url_for('login') }}">登录</a>
                 {% endif %}
             </nav>
         </div>
@@ -31,12 +39,7 @@
         <div class="blog-header">
 
         </div>
-        {% for message in get_flashed_messages() %}
-            <div class="alert alert-warning">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                {{ message }}
-            </div>
-        {% endfor %}
+        {{ utils.flashed_messages(dismissible=True) }}
         {% block pageContent %}
 
         {% endblock %}

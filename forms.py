@@ -8,3 +8,8 @@ class LoginForm(Form):
     password = PasswordField('密码', validators=[DataRequired()])
     rememberMe = BooleanField('记住我？')
     submit = SubmitField('登录')
+
+
+class PostForm(Form):
+    title = StringField('标题', validators=[DataRequired(), Length(1, 64)])
+    submit = SubmitField('发布')
