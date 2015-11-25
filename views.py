@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for, flash
-from flask.ext.login import login_required, login_user, logout_user
+from flask.ext.login import login_required, login_user, logout_user, current_user
 from flask_pymongo import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -10,13 +10,19 @@ from pyblog import app, mongo, login_manager
 
 @app.route('/')
 def index():
-    blogs = mongo.db.blogs.find()
-    return render_template('index.html', blogs=list(blogs))
+    user = getMe()
+    blogCollection = mongo.db.blogs.find({'userId': ObjectId(user.get_id())})
+    blogs = list(blogCollection)
+    for blog in blogs:
+        blog.setdefault('user', user)
+    print(blogs)
+    return render_template('index.html', blogs=blogs)
 
 
-@app.route('/blog/<int:id>')
+@app.route('/blog/<id>')
 def viewBlog(id):
     blog = mongo.db.blogs.find_one_or_404({'_id': ObjectId(id)})
+    blog.setdefault('user', getMe())
     return render_template('blog.html', blog=blog)
 
 
@@ -25,7 +31,8 @@ def viewBlog(id):
 def postBlog():
     form = PostForm()
     if form.validate_on_submit():
-        blog = request.json
+        blog = form.getBlog()
+        blog["userId"] = ObjectId(current_user.get_id())
         mongo.db.blogs.insert(blog)
         flash('发布成功')
         return redirect(request.args.get('next') or url_for('index'))
@@ -71,3 +78,12 @@ def initMe():
     me = mongo.db.users.find_one({'userName': 'hym'})
     if not me:
         mongo.db.users.insert({'userName': 'hym', 'password': generate_password_hash('123456'), 'nickName': '星奕'})
+
+
+def getMe():
+    me = mongo.db.users.find_one({'userName': 'hym'})
+    if me:
+        return User(me)
+    else:
+        initMe()
+        return getMe()

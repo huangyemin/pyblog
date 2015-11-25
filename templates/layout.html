@@ -36,9 +36,9 @@
 
 {% block content %}
     <div class="container">
-        <div class="blog-header">
+        {% block pageHeader %}
 
-        </div>
+        {% endblock %}
         {{ utils.flashed_messages(dismissible=True) }}
         {% block pageContent %}
 
@@ -48,11 +48,10 @@
     <br>
     <footer class="blog-footer">
 
-        <p>Blog template built for <a href="http://getbootstrap.com">Bootstrap</a> by <a
-                href="https://twitter.com/mdo">@mdo</a>.</p>
+        <p>Powered by <a href="https://github.com/huangyemin/pyblog">pyblog</a></p>
 
         <p>
-            <a href="#">Back to top</a>
+            <a href="#">回到顶部</a>
         </p>
     </footer>
 {% endblock %}
