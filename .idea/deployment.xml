@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="xetlab">
+  <component name="PublishConfigData" serverName="xetlab" uploadOnCheckin="7264e75d-a677-46a4-ba16-13806f3144dd">
     <serverData>
       <paths name="xetlab">
         <serverdata>
@@ -10,5 +10,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myUploadOnCheckinName" value="xetlab" />
   </component>
 </project>
