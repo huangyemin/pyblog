@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="7264e75d-a677-46a4-ba16-13806f3144dd" name="xetlab" url="http://121.43.153.159">
-        <fileTransfer host="121.43.153.159" port="22" accessType="SFTP" username="root">
+        <fileTransfer host="121.43.153.159" port="22" accessType="SFTP" password="dfd2dfcfdfdedfd4df92df98df9fdf9adf9ddf92df8bdfc6dfcbdfc8" username="root">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>

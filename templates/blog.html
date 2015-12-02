@@ -7,7 +7,8 @@
     <div class="blog-post">
         <h2 class="blog-post-title">{{ blog.title }}</h2>
 
-        <p class="blog-post-meta">{{ blog.postTime|datetimeformat }} <a href="/">{{ blog.user.nickName }}</a></p>
+        <p class="blog-post-meta">{{ blog.postTime|datetimeformat('yyyy-MM-dd HH:mm:ss') }} <a
+                href="/">{{ blog.user.nickName }}</a></p>
         {{ blog.html|safe }}
     </div>
 {% endblock %}

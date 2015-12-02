@@ -8,6 +8,10 @@
 {% block html_attribs %}
     lang="zh-CN"
 {% endblock %}
+{% block metas %}
+    {{ super() }}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.png') }}" type="image/x-icon"/>
+{% endblock %}
 {% block styles %}
     {{ super() }}
     <link href="{{ url_for('static', filename='css/blog.css') }}" rel="stylesheet">
@@ -54,4 +58,16 @@
             <a href="#">回到顶部</a>
         </p>
     </footer>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?af448931aaa246055504a01c20a7ae36";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 {% endblock %}

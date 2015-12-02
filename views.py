@@ -1,29 +1,53 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask.ext.login import login_required, login_user, logout_user, current_user
+from flask.ext.paginate import Pagination
 from flask_pymongo import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from forms import *
+from manage import app
 from models import User
-from pyblog import app, mongo, login_manager
+from pyblog import mongo, login_manager
 
 
-@app.route('/')
-def index():
+@app.route('/', defaults={'page': 1})
+@app.route('/blogs/page/<int:page>')
+def index(page):
     user = getMe()
-    blogCollection = mongo.db.blogs.find({'userId': ObjectId(user.get_id())})
+    condition = {'userId': ObjectId(user.get_id())}
+    db_blogs = mongo.db.blogs.find(condition)
+
+    pageSize = app.config['PAGE_SIZE']
+    skipNum = (page - 1) * pageSize
+    blogCollection = db_blogs.skip(skipNum).limit(pageSize)
     blogs = list(blogCollection)
     for blog in blogs:
         blog.setdefault('user', user)
-    print(blogs)
-    return render_template('index.html', blogs=blogs)
+    pagination = Pagination(page=page, total=db_blogs.count(), per_page=pageSize, bs_version='3')
+    return render_template('index.html', blogs=blogs, pagination=pagination)
 
 
 @app.route('/blog/<id>')
 def viewBlog(id):
     blog = mongo.db.blogs.find_one_or_404({'_id': ObjectId(id)})
     blog.setdefault('user', getMe())
+    if not (current_user and current_user.is_authenticated):
+        mongo.db.blogs.update({'_id': ObjectId(id)}, {'$inc': {'viewCount': 1}})
     return render_template('blog.html', blog=blog)
+
+
+@app.route('/editBlog/<id>', methods=['GET', 'POST'])
+@login_required
+def editBlog(id):
+    blog = mongo.db.blogs.find_one_or_404({'_id': ObjectId(id)})
+    form = PostForm(data=blog)
+    if form.validate_on_submit():
+        formData = form.getBlog()
+        formData.pop('postTime')
+        mongo.db.blogs.update({'_id': ObjectId(id)}, {'$set': formData})
+        flash('发布成功')
+        return redirect(request.args.get('next') or url_for('index'))
+    return render_template('post.html', form=form)
 
 
 @app.route('/postBlog', methods=['GET', 'POST'])
@@ -33,6 +57,7 @@ def postBlog():
     if form.validate_on_submit():
         blog = form.getBlog()
         blog["userId"] = ObjectId(current_user.get_id())
+        blog["viewCount"] = 0
         mongo.db.blogs.insert(blog)
         flash('发布成功')
         return redirect(request.args.get('next') or url_for('index'))
@@ -75,13 +100,15 @@ def about():
 
 @app.before_first_request
 def initMe():
-    me = mongo.db.users.find_one({'userName': 'hym'})
+    me = mongo.db.users.find_one({'userName': app.config['DEFAULT_USER']})
     if not me:
-        mongo.db.users.insert({'userName': 'hym', 'password': generate_password_hash('123456'), 'nickName': '星奕'})
+        mongo.db.users.insert(
+            {'userName': app.config['DEFAULT_USER'], 'password': generate_password_hash(app.config['DEFAULT_USER']),
+             'nickName': app.config['DEFAULT_USER']})
 
 
 def getMe():
-    me = mongo.db.users.find_one({'userName': 'hym'})
+    me = mongo.db.users.find_one({'userName': app.config['DEFAULT_USER']})
     if me:
         return User(me)
     else:
