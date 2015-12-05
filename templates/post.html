@@ -9,18 +9,23 @@
     <link href="{{ url_for('static', filename='markdown/Markdown.Editor.css') }}" rel="stylesheet">
 {% endblock %}
 {% block pageContent %}
-    <div class="page-header">
-        <h1>发表文章</h1>
-    </div>
+    <br>
     <form method="POST" class="form" role="form">
+
         {{ form.csrf_token }}
         {{ form.html(id='html') }}
-        {{ wtf.form_field(form.title) }}
+        {{ form.title(class="form-control title-input", placeholder="标题") }}
+        <br>
         <div class="wmd-panel">
             <div id="wmd-button-bar"></div>
-            {{ form.markdown(id='wmd-input',class='wmd-input') }}
+            <div class="row">
+                <div class="col-sm-6">{{ form.markdown(id='wmd-input',class='wmd-input') }}</div>
+                <div class="col-sm-6">
+                    <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
+                </div>
+            </div>
         </div>
-        <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
+
         {{ wtf.form_field(form.submit) }}
     </form>
 {% endblock %}
