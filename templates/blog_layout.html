@@ -48,3 +48,11 @@
 
     </div><!-- /.row -->
 {% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+    </script>
+    <script src="{{ url_for('static', filename='js/blog.js') }}"></script>
+{% endblock %}

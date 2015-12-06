@@ -50,6 +50,13 @@ def editBlog(id):
     return render_template('post.html', form=form)
 
 
+@app.route('/deleteBlog/<id>', methods=['GET', 'POST'])
+@login_required
+def deleteBlog(id):
+    mongo.db.blogs.remove({'_id': ObjectId(id)})
+    flash('删除成功')
+    return redirect(request.args.get('next') or url_for('index'))
+
 @app.route('/postBlog', methods=['GET', 'POST'])
 @login_required
 def postBlog():

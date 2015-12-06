@@ -8,7 +8,12 @@
         <h2 class="blog-post-title">{{ blog.title }}</h2>
 
         <p class="blog-post-meta">{{ blog.postTime|datetimeformat('yyyy-MM-dd HH:mm:ss') }} <a
-                href="/">{{ blog.user.nickName }}</a></p>
+                href="/">{{ blog.user.nickName }}</a>
+            {% if current_user.is_authenticated %}
+                <a href="/editBlog/{{ blog._id }}">编辑</a>
+                <a href="#" onclick="confirmDelete('{{ blog._id }}')">删除</a>
+            {% endif %}
+        </p>
         {{ blog.html|safe }}
     </div>
 {% endblock %}
