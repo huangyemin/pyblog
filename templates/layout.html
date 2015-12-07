@@ -72,6 +72,6 @@
         })();
     </script>
     <script src="//cdn.bootcss.com/bootbox.js/4.4.0/bootbox.min.js"></script>
-    {{ moment.include_moment() }}
+    {{ moment.include_moment(local_js='//cdn.bootcss.com/moment.js/2.10.6/moment-with-locales.min.js') }}
     {{ moment.lang('zh-cn') }}
 {% endblock %}
