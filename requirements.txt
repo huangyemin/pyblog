@@ -7,6 +7,7 @@ Flask-PyMongo==0.4.0
 Flask-WTF==0.12
 Flask-Script==2.0.5
 Flask-paginate==0.4.1
+Flask-moment==0.5.1
 Jinja2==2.8
 MarkupSafe==0.23
 WTForms==2.0.2

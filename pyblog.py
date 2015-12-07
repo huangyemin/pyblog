@@ -3,6 +3,7 @@ from flask.ext.bootstrap import Bootstrap
 from flask.ext.login import LoginManager
 from flask.ext.pymongo import PyMongo
 from flask_babel import Babel
+from flask_moment import Moment
 
 from config import config
 
@@ -10,6 +11,7 @@ bootstrap = Bootstrap()
 mongo = PyMongo()
 login_manager = LoginManager()
 babel = Babel()
+moment = Moment()
 
 
 def create_app(config_name):
@@ -20,6 +22,7 @@ def create_app(config_name):
     mongo.init_app(app)
     login_manager.init_app(app)
     babel.init_app(app)
+    moment.init_app(app)
 
     config[config_name].init_app(app)
 
