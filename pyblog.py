@@ -29,4 +29,17 @@ def create_app(config_name):
     login_manager.session_protection = 'strong'
     login_manager.login_view = 'login'
 
+    if not app.debug:
+        import logging
+        from logging.handlers import TimedRotatingFileHandler
+        warn_file_handler = TimedRotatingFileHandler(filename="pyblog.warn.log", when='midnight', interval=1,
+                                                     encoding="utf8")
+        warn_file_handler.setLevel(logging.WARNING)
+        app.logger.addHandler(warn_file_handler)
+
+        error_file_handler = TimedRotatingFileHandler(filename="pyblog.error.log", when='midnight', interval=1,
+                                                      encoding="utf8")
+        error_file_handler.setLevel(logging.ERROR)
+        app.logger.addHandler(error_file_handler)
+
     return app
