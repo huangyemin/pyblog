@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask.ext.login import login_required, login_user, logout_user, current_user
 from flask.ext.paginate import Pagination
+from flask_pymongo import DESCENDING
 from flask_pymongo import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -15,7 +16,7 @@ from pyblog import mongo, login_manager
 def index(page):
     user = getMe()
     condition = {'userId': ObjectId(user.get_id())}
-    db_blogs = mongo.db.blogs.find(condition)
+    db_blogs = mongo.db.blogs.find(condition).sort("postTime", DESCENDING)
 
     pageSize = app.config['PAGE_SIZE']
     skipNum = (page - 1) * pageSize
