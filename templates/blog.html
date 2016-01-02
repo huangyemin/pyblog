@@ -40,17 +40,20 @@
                                 var e = b.readyState;
                                 if (e === "loaded" || e === "complete") {
                                     b.onreadystatechange = null;
-                                    a()
+                                    a();
                                 }
                             }
                         } else {
-                            b.onload = a
+                            b.onload = a;
                         }
                     }
-                    c.appendChild(b)
+                    c.appendChild(b);
                 };
                 loadJs("http://changyan.sohu.com/upload/changyan.js", function () {
-                    window.changyan.api.config({appid: appid, conf: conf})
+                    window._config = {showScore: true};
+                    window.changyan.api.config({
+                        appid: appid, conf: conf
+                    });
                 });
             }
         })(); </script>
