@@ -16,4 +16,16 @@
         </p>
         {{ blog.html|safe }}
     </div>
+    <div id="SOHUCS"></div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js"></script>
+    <script type="text/javascript">
+        window._config = {showScore: true};
+        window.changyan.api.config({
+            appid: 'cysaPY4hd',
+            conf: 'prod_b2687f0cac54479e86a918415927fcf4'
+        });
+    </script>
 {% endblock %}

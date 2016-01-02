@@ -43,6 +43,9 @@
                         <li><a href="http://www.weiqitv.com/">围棋TV网</a></li>
                     </ol>
                 </div>
+                <div class="sidebar-module">
+                    <div id="cyReping" role="cylabs" data-use="reping"></div>
+                </div>
             {% endblock %}
         </div><!-- /.blog-sidebar -->
 
@@ -55,4 +58,6 @@
         var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
     </script>
     <script src="{{ url_for('static', filename='js/blog.js') }}"></script>
+    <script type="text/javascript" charset="utf-8"
+            src="http://changyan.itc.cn/js/??lib/jquery.js,changyan.labs.js?appid=cysaPY4hd"></script>
 {% endblock %}
